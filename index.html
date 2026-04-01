@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wemaiq — Creative Studio</title>
+  <meta name="description" content="Wemaiq is a boutique creative studio based in Canada. Design, experience, and intelligence at the edges." />
+  <meta property="og:title" content="Wemaiq — Creative Studio" />
+  <meta property="og:description" content="Design, experience, and intelligence at the edges. A creative studio for the curious." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://wemaiq.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400..700;1,400..700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #333;
+      --off-white: #f7f6f3;
+      --mid: #999;
+      --faint: #bbb;
+      --rule: #e0ded9;
+      --serif: "STIX Two Text", Georgia, serif;
+      --sans: "DM Sans", system-ui, sans-serif;
+      --nav-h: 64px;
+      --max: 660px;
+      --max-wide: 940px;
+      --transition-page: 0.22s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--off-white);
+      color: var(--black);
+      font-size: 17px;
+      line-height: 1.75;
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ─────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      background: var(--off-white);
+      z-index: 200;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s;
+    }
+    nav.scrolled { border-color: var(--rule); }
+
+    .nav-logo {
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 15px;
+      letter-spacing: 0.03em;
+      color: var(--black);
+      text-decoration: none;
+    }
+    .nav-logo .dot { opacity: 0.35; }
+
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--black);
+      text-decoration: none;
+      opacity: 0.4;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 0.75; }
+    .nav-links a.active { opacity: 1; }
+
+    /* hamburger */
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 32px;
+      height: 32px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      height: 1px;
+      background: var(--black);
+      transition: transform 0.25s, opacity 0.25s;
+      transform-origin: center;
+    }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    /* mobile drawer */
+    .nav-drawer {
+      display: none;
+      position: fixed;
+      top: var(--nav-h);
+      left: 0; right: 0;
+      background: var(--off-white);
+      border-bottom: 1px solid var(--rule);
+      padding: 20px 24px 28px;
+      z-index: 190;
+    }
+    .nav-drawer.open { display: block; }
+    .nav-drawer ul { list-style: none; display: flex; flex-direction: column; gap: 0; }
+    .nav-drawer ul a {
+      display: block;
+      padding: 12px 0;
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--black);
+      text-decoration: none;
+      opacity: 0.55;
+      border-bottom: 1px solid var(--rule);
+      transition: opacity 0.2s;
+    }
+    .nav-drawer ul li:last-child a { border-bottom: none; }
+    .nav-drawer ul a.active { opacity: 1; }
+
+    /* ── PAGES ───────────────────────────────────────── */
+    .page {
+      display: none;
+      min-height: 100vh;
+      padding-top: var(--nav-h);
+      opacity: 0;
+      transition: opacity var(--transition-page);
+    }
+    .page.active { display: block; }
+    .page.visible { opacity: 1; }
+
+    /* ── LAYOUT ──────────────────────────────────────── */
+    .wrap      { max-width: var(--max);      margin: 0 auto; padding: 0 48px; }
+    .wrap-wide { max-width: var(--max-wide); margin: 0 auto; padding: 0 48px; }
+
+    hr.rule { border: none; border-top: 1px solid var(--rule); margin: 80px 0; }
+
+    .label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 32px;
+      display: block;
+    }
+
+    /* ── HOME ────────────────────────────────────────── */
+    .hero { padding: 116px 0 96px; }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 36px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 1px;
+      background: var(--mid);
+      flex-shrink: 0;
+    }
+
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(48px, 7vw, 80px);
+      line-height: 1.06;
+      font-weight: 600;
+      font-optical-sizing: auto;
+      letter-spacing: -0.02em;
+      color: var(--black);
+      margin-bottom: 28px;
+    }
+
+    .hero-sub {
+      font-size: 16px;
+      color: var(--mid);
+      max-width: 400px;
+      line-height: 1.85;
+    }
+
+    .hero-cta {
+      margin-top: 52px;
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .btn-solid {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      color: var(--off-white);
+      background: var(--black);
+      padding: 13px 26px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-solid:hover { background: #555; }
+
+    .btn-text {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--mid);
+      text-decoration: none;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-text:hover { color: var(--black); border-color: var(--black); }
+
+    /* studio */
+    .studio-section { padding: 80px 0; }
+    .studio-section p {
+      font-size: 17px;
+      color: var(--black);
+      margin-bottom: 20px;
+    }
+    .studio-section p:last-child { margin-bottom: 0; }
+
+    /* how */
+    .how-section { padding: 80px 0; }
+    .how-intro {
+      font-family: var(--serif);
+      font-size: clamp(22px, 3vw, 32px);
+      line-height: 1.38;
+      font-weight: 600;
+      font-optical-sizing: auto;
+      color: var(--black);
+      margin-bottom: 24px;
+    }
+    .how-body { font-size: 16px; color: var(--black); line-height: 1.85; }
+
+    /* current */
+    .current-section { padding: 80px 0; }
+    .current-callout {
+      border-left: 2px solid var(--rule);
+      padding: 4px 0 4px 24px;
+    }
+    .current-callout p {
+      font-size: 16px;
+      color: var(--black);
+      line-height: 1.8;
+    }
+    .current-callout a {
+      color: var(--black);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-color: var(--faint);
+      transition: text-decoration-color 0.2s;
+    }
+    .current-callout a:hover { text-decoration-color: var(--black); }
+
+    /* ── ABOUT ───────────────────────────────────────── */
+    .page-header { padding: 116px 0 72px; }
+    .page-header h1 {
+      font-family: var(--serif);
+      font-size: clamp(38px, 5.5vw, 64px);
+      font-weight: 600;
+      font-optical-sizing: auto;
+      line-height: 1.06;
+      letter-spacing: -0.018em;
+      color: var(--black);
+    }
+
+    .philosophy { padding: 0 0 80px; }
+    .big-text {
+      font-family: var(--serif);
+      font-size: clamp(22px, 3.2vw, 36px);
+      line-height: 1.5;
+      font-weight: 400;
+      font-optical-sizing: auto;
+      color: var(--faint);
+    }
+    .big-text strong { color: var(--black); font-weight: 600; }
+    .body-text {
+      font-size: 16px;
+      color: var(--black);
+      line-height: 1.85;
+      margin-top: 40px;
+      max-width: 560px;
+    }
+
+    /* founders */
+    .founders { padding: 80px 0; }
+    .founder-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+    .founder-card {
+      background: var(--off-white);
+      padding: 48px 40px;
+      transition: background 0.2s;
+    }
+    .founder-card:hover { background: #f2f1ee; }
+
+    .founder-name {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 600;
+      font-optical-sizing: auto;
+      color: var(--black);
+      margin-bottom: 8px;
+    }
+    .founder-role {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--mid);
+      border: 1px solid var(--rule);
+      padding: 3px 9px;
+      margin-bottom: 22px;
+    }
+    .founder-bio { font-size: 15px; color: var(--black); line-height: 1.82; }
+
+    /* ── CONTACT ─────────────────────────────────────── */
+    #contact .page-header p {
+      font-size: 16px;
+      color: var(--mid);
+      line-height: 1.75;
+      max-width: 400px;
+      margin-top: 20px;
+    }
+    .contact-body { padding: 0 0 120px; }
+    .contact-email {
+      font-family: var(--serif);
+      font-size: clamp(26px, 4vw, 46px);
+      font-weight: 600;
+      font-optical-sizing: auto;
+      color: var(--black);
+      text-decoration: none;
+      display: inline-block;
+      position: relative;
+      transition: opacity 0.2s;
+    }
+    .contact-email::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0; right: 0;
+      height: 2px;
+      background: var(--black);
+      transform-origin: left;
+      transition: transform 0.25s ease;
+    }
+    .contact-email:hover { opacity: 0.5; }
+    .contact-email:hover::after { transform: scaleX(0.6); }
+
+    .contact-note {
+      margin-top: 56px;
+      font-size: 14px;
+      color: var(--mid);
+      line-height: 1.85;
+      max-width: 380px;
+    }
+
+    /* ── FOOTER ──────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--rule);
+      padding: 28px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    footer p { font-size: 12px; color: var(--mid); letter-spacing: 0.03em; }
+
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 640px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+      .wrap, .wrap-wide { padding: 0 24px; }
+      footer { padding: 24px; flex-direction: column; gap: 8px; text-align: center; }
+      .hero { padding: 88px 0 68px; }
+      .founder-grid { grid-template-columns: 1fr; }
+      .founder-card { padding: 32px 24px; }
+      .current-callout { padding-left: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav id="main-nav" role="navigation" aria-label="Main navigation">
+  <a class="nav-logo" href="#" onclick="show('home'); return false;" aria-label="Wemaiq home">wemaiq<span class="dot" aria-hidden="true">.</span></a>
+  <ul class="nav-links" role="list">
+    <li><a href="#" id="nl-home"    onclick="show('home');    return false;">Home</a></li>
+    <li><a href="#" id="nl-about"   onclick="show('about');   return false;">About</a></li>
+    <li><a href="#" id="nl-contact" onclick="show('contact'); return false;">Contact</a></li>
+  </ul>
+  <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="nav-drawer" id="nav-drawer" role="dialog" aria-label="Navigation menu">
+  <ul role="list">
+    <li><a href="#" id="nd-home"    onclick="show('home');    closeDrawer(); return false;">Home</a></li>
+    <li><a href="#" id="nd-about"   onclick="show('about');   closeDrawer(); return false;">About</a></li>
+    <li><a href="#" id="nd-contact" onclick="show('contact'); closeDrawer(); return false;">Contact</a></li>
+  </ul>
+</div>
+
+
+<!-- HOME -->
+<div id="home" class="page" role="main">
+  <section class="hero">
+    <div class="wrap">
+      <span class="hero-eyebrow" aria-hidden="true">Wemaiq Studio</span>
+      <h1>Unravel<br>complexity.</h1>
+      <p class="hero-sub">Design, experience, and intelligence at the edges. A creative studio for the curious.</p>
+      <div class="hero-cta">
+        <a class="btn-solid" href="#" onclick="show('about'); return false;">The Studio</a>
+        <a class="btn-text"  href="#" onclick="show('contact'); return false;">Get in touch</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><hr class="rule"></div>
+
+  <section class="studio-section">
+    <div class="wrap">
+      <span class="label">The Studio</span>
+      <p>Wemaiq is a boutique creative studio based in Canada.</p>
+      <p>Founded by Brigitte K and Alex M, the studio brings together decades of experience across user experience, product design, and service design. Together they have led organizations, shaped product strategy, and built digital systems used by millions of people.</p>
+      <p>Today their work focuses on designing and building thoughtful software — tools grounded in human needs, clear thinking, and careful craft.</p>
+    </div>
+  </section>
+
+  <div class="wrap"><hr class="rule"></div>
+
+  <section class="how-section">
+    <div class="wrap">
+      <span class="label">How We Work</span>
+      <p class="how-intro">We believe the best tools emerge from a deep understanding of people.</p>
+      <p class="how-body">Our approach combines product thinking, design craft, and systems thinking to create software that is simple, durable, and genuinely useful. We focus on clarity, usability, and long-term product thinking rather than trends.</p>
+    </div>
+  </section>
+
+  <div class="wrap"><hr class="rule"></div>
+
+  <section class="current-section">
+    <div class="wrap">
+      <span class="label">Current Work</span>
+      <div class="current-callout">
+        <p>Wemaiq is currently building <a href="https://rekko.me" target="_blank" rel="noopener noreferrer">Rekko</a> — a tool designed to help professionals capture and understand their work impact and recognition.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Wemaiq Inc. &bull; Based in Canada</p>
+    <p>&copy; 2026</p>
+  </footer>
+</div>
+
+
+<!-- ABOUT -->
+<div id="about" class="page">
+  <section class="page-header">
+    <div class="wrap">
+      <span class="label">About</span>
+      <h1>Function<br>+ <em>Feeling</em>.</h1>
+    </div>
+  </section>
+
+  <section class="philosophy">
+    <div class="wrap">
+      <p class="big-text">We believe things should <strong>work.</strong> That the care put into making something is felt by the people who use it — <strong>a connection</strong> from creator to creation.</p>
+      <p class="body-text">So on every project we start with two questions: what does it do, and how does using it make people feel? Our approach combines product thinking, design craft, and systems thinking to create software that is simple, durable, and genuinely useful. We focus on clarity, usability, and long-term product thinking rather than trends.</p>
+    </div>
+  </section>
+
+  <div class="wrap"><hr class="rule"></div>
+
+  <section class="founders">
+    <div class="wrap-wide">
+      <span class="label">Founders</span>
+      <div class="founder-grid">
+        <div class="founder-card">
+          <h2 class="founder-name">Brigitte K</h2>
+          <span class="founder-role">Design Leader</span>
+          <p class="founder-bio">Design leader specialising in human-centred product and service design. Brigitte has led design organisations and helped shape complex digital services, with a focus on clarity, usability, and meaningful user outcomes.</p>
+        </div>
+        <div class="founder-card">
+          <h2 class="founder-name">Alex M</h2>
+          <span class="founder-role">Product &amp; Design Leader</span>
+          <p class="founder-bio">Product and design leader with a background in user experience, service design, and product strategy. Alex has led multidisciplinary teams and built digital products across multiple industries, focusing on systems that help people do their best work.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><hr class="rule"></div>
+
+  <section class="current-section" style="padding: 0 0 80px;">
+    <div class="wrap">
+      <span class="label">Current Work</span>
+      <div class="current-callout">
+        <p>Wemaiq is currently building <a href="https://rekko.me" target="_blank" rel="noopener noreferrer">Rekko</a> — a tool designed to help professionals capture and understand their work impact and recognition.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Wemaiq Inc. &bull; Based in Canada</p>
+    <p>&copy; 2026</p>
+  </footer>
+</div>
+
+
+<!-- CONTACT -->
+<div id="contact" class="page">
+  <section class="page-header">
+    <div class="wrap">
+      <span class="label">Contact</span>
+      <h1>Let's talk.</h1>
+      <p>For partnerships, project inquiries, or just to say hello — we'd love to hear from you.</p>
+    </div>
+  </section>
+
+  <section class="contact-body">
+    <div class="wrap">
+      <a class="contact-email" href="mailto:hello@wemaiq.com">hello@wemaiq.com</a>
+      <p class="contact-note">We're a small studio, so we take on select projects where we can do our best work. If what you're building sounds interesting, reach out — we'll get back to you promptly.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Wemaiq Inc. &bull; Based in Canada</p>
+    <p>&copy; 2026</p>
+  </footer>
+</div>
+
+
+<script>
+  var currentPage = 'home';
+
+  function show(id) {
+    var prev = document.getElementById(currentPage);
+    if (prev) {
+      prev.classList.remove('visible');
+      // brief delay so fade-out isn't jarring on same-tick re-show
+      setTimeout(function() { prev.classList.remove('active'); }, 0);
+    }
+
+    currentPage = id;
+
+    document.querySelectorAll('.nav-links a, .nav-drawer ul a').forEach(function(a) {
+      a.classList.remove('active');
+      a.removeAttribute('aria-current');
+    });
+
+    var nl = document.getElementById('nl-' + id);
+    if (nl) { nl.classList.add('active'); nl.setAttribute('aria-current', 'page'); }
+    var nd = document.getElementById('nd-' + id);
+    if (nd) { nd.classList.add('active'); nd.setAttribute('aria-current', 'page'); }
+
+    var next = document.getElementById(id);
+    next.classList.add('active');
+    window.scrollTo(0, 0);
+
+    // trigger fade-in on next frame
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        next.classList.add('visible');
+      });
+    });
+  }
+
+  // mobile drawer
+  var toggle = document.getElementById('nav-toggle');
+  var drawer = document.getElementById('nav-drawer');
+
+  function closeDrawer() {
+    toggle.classList.remove('open');
+    drawer.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+
+  toggle.addEventListener('click', function() {
+    var isOpen = drawer.classList.toggle('open');
+    toggle.classList.toggle('open', isOpen);
+    toggle.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  // close drawer on outside click
+  document.addEventListener('click', function(e) {
+    if (!toggle.contains(e.target) && !drawer.contains(e.target)) {
+      closeDrawer();
+    }
+  });
+
+  // nav scroll border
+  window.addEventListener('scroll', function() {
+    document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 8);
+  }, { passive: true });
+
+  show('home');
+</script>
+</body>
+</html>
