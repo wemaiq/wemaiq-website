@@ -58,14 +58,15 @@
     nav.scrolled { border-color: var(--rule); }
 
     .nav-logo {
-      font-family: var(--sans);
-      font-weight: 500;
-      font-size: 15px;
-      letter-spacing: 0.03em;
-      color: var(--black);
+      display: flex;
+      align-items: center;
       text-decoration: none;
     }
-    .nav-logo .dot { opacity: 0.35; }
+    .nav-logo img {
+      height: 15px;
+      width: auto;
+      display: block;
+    }
 
     .nav-links { display: flex; gap: 36px; list-style: none; }
     .nav-links a {
@@ -407,7 +408,9 @@
 <body>
 
 <nav id="main-nav" role="navigation" aria-label="Main navigation">
-  <a class="nav-logo" href="#" onclick="show('home'); return false;" aria-label="Wemaiq home">wemaiq<span class="dot" aria-hidden="true">.</span></a>
+  <a class="nav-logo" href="#" onclick="show('home'); return false;" aria-label="Wemaiq home">
+    <img src="wemaiq-small.svg" alt="Wemaiq" />
+  </a>
   <ul class="nav-links" role="list">
     <li><a href="#" id="nl-home"    onclick="show('home');    return false;">Home</a></li>
     <li><a href="#" id="nl-about"   onclick="show('about');   return false;">About</a></li>
