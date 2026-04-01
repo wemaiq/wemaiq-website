@@ -26,10 +26,19 @@
       --nav-h: 64px;
       --max: 660px;
       --max-wide: 940px;
-      --transition-page: 0.22s ease;
+      --transition-page: 0.42s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: var(--nav-h);
+      scrollbar-width: thin;
+      scrollbar-color: var(--rule) transparent;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #c0bdb8; }
 
     body {
       font-family: var(--sans);
@@ -63,7 +72,7 @@
       text-decoration: none;
     }
     .nav-logo img {
-      height: 15px;
+      height: 20px;
       width: auto;
       display: block;
     }
@@ -137,10 +146,11 @@
       min-height: 100vh;
       padding-top: var(--nav-h);
       opacity: 0;
-      transition: opacity var(--transition-page);
+      transform: translateY(12px);
+      transition: opacity var(--transition-page), transform var(--transition-page);
     }
     .page.active { display: block; }
-    .page.visible { opacity: 1; }
+    .page.visible { opacity: 1; transform: translateY(0); }
 
     /* ── LAYOUT ──────────────────────────────────────── */
     .wrap      { max-width: var(--max);      margin: 0 auto; padding: 0 48px; }
@@ -172,15 +182,6 @@
       align-items: center;
       gap: 12px;
     }
-    .hero-eyebrow::before {
-      content: '';
-      display: inline-block;
-      width: 24px;
-      height: 1px;
-      background: var(--mid);
-      flex-shrink: 0;
-    }
-
     .hero h1 {
       font-family: var(--serif);
       font-size: clamp(48px, 7vw, 80px);
@@ -444,8 +445,6 @@
     </div>
   </section>
 
-  <div class="wrap"><hr class="rule"></div>
-
   <section class="studio-section">
     <div class="wrap">
       <span class="label">The Studio</span>
@@ -455,8 +454,6 @@
     </div>
   </section>
 
-  <div class="wrap"><hr class="rule"></div>
-
   <section class="how-section">
     <div class="wrap">
       <span class="label">How We Work</span>
@@ -464,8 +461,6 @@
       <p class="how-body">Our approach combines product thinking, design craft, and systems thinking to create software that is simple, durable, and genuinely useful. We focus on clarity, usability, and long-term product thinking rather than trends.</p>
     </div>
   </section>
-
-  <div class="wrap"><hr class="rule"></div>
 
   <section class="current-section">
     <div class="wrap">
@@ -566,10 +561,13 @@
 
   function show(id) {
     var prev = document.getElementById(currentPage);
-    if (prev) {
+    var next = document.getElementById(id);
+
+    // Only fade out if navigating to a different page
+    if (prev && prev !== next) {
       prev.classList.remove('visible');
-      // brief delay so fade-out isn't jarring on same-tick re-show
-      setTimeout(function() { prev.classList.remove('active'); }, 0);
+      var prevRef = prev;
+      setTimeout(function() { prevRef.classList.remove('active'); }, 420);
     }
 
     currentPage = id;
@@ -584,11 +582,10 @@
     var nd = document.getElementById('nd-' + id);
     if (nd) { nd.classList.add('active'); nd.setAttribute('aria-current', 'page'); }
 
-    var next = document.getElementById(id);
     next.classList.add('active');
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'instant' });
 
-    // trigger fade-in on next frame
+    // Trigger fade-in + slide-up on next frame
     requestAnimationFrame(function() {
       requestAnimationFrame(function() {
         next.classList.add('visible');
