@@ -11,44 +11,52 @@
   <meta property="og:url" content="https://wemaiq.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=STIX+Two+Text:ital,wght@0,400..700;1,400..700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Instrument+Serif&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --black: #333;
-      --off-white: #f7f6f3;
-      --mid: #737373;
-      --faint: #8c8c8c;
-      --rule: #e0ded9;
-      --serif: "STIX Two Text", Georgia, serif;
+      --ink: #1a1a1a;
+      --ink-light: #4a4a4a;
+      --surface: #fafaf8;
+      --surface-warm: #f4f3f0;
+      --accent: #c8a97e;
+      --accent-muted: rgba(200,169,126,0.15);
+      --border: #e8e6e1;
+      --muted: #8a8a85;
+      --serif: "Instrument Serif", Georgia, serif;
       --sans: "DM Sans", system-ui, sans-serif;
-      --nav-h: 64px;
-      --max: 858px;
-      --max-wide: 1222px;
-      --transition-page: 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+      --nav-h: 72px;
+      --max: 880px;
+      --max-wide: 1200px;
+      --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     html {
       scroll-behavior: smooth;
       scroll-padding-top: var(--nav-h);
       scrollbar-width: thin;
-      scrollbar-color: var(--rule) transparent;
+      scrollbar-color: var(--border) transparent;
     }
-    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: #c0bdb8; }
 
     body {
       font-family: var(--sans);
-      background: var(--off-white);
-      color: var(--black);
-      font-size: 21px;
-      line-height: 1.75;
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 18px;
+      line-height: 1.7;
       font-weight: 300;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
+
+    /* ── SELECTION ───────────────────────────────────── */
+    ::selection { background: var(--accent-muted); color: var(--ink); }
 
     /* ── NAV ─────────────────────────────────────────── */
     nav {
@@ -58,36 +66,54 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 48px;
-      background: var(--off-white);
+      padding: 0 clamp(24px, 4vw, 56px);
+      background: rgba(250,250,248,0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       z-index: 200;
       border-bottom: 1px solid transparent;
-      transition: border-color 0.3s;
+      transition: border-color 0.4s var(--ease);
     }
-    nav.scrolled { border-color: var(--rule); }
+    nav.scrolled { border-color: var(--border); }
 
     .nav-logo {
       display: flex;
       align-items: center;
       text-decoration: none;
+      transition: opacity 0.2s;
     }
+    .nav-logo:hover { opacity: 0.6; }
     .nav-logo img {
-      height: 20px;
+      height: 18px;
       width: auto;
       display: block;
     }
 
-    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links { display: flex; gap: 40px; list-style: none; }
     .nav-links a {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 400;
-      color: var(--black);
+      letter-spacing: 0.06em;
+      color: var(--ink);
       text-decoration: none;
-      opacity: 0.4;
-      transition: opacity 0.2s;
+      opacity: 0.35;
+      transition: opacity 0.3s var(--ease);
+      position: relative;
     }
-    .nav-links a:hover { opacity: 0.75; }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s var(--ease-out);
+    }
+    .nav-links a:hover { opacity: 0.7; }
+    .nav-links a:hover::after { width: 100%; }
     .nav-links a.active { opacity: 1; }
+    .nav-links a.active::after { width: 100%; background: var(--ink); }
 
     /* hamburger */
     .nav-toggle {
@@ -105,8 +131,8 @@
     .nav-toggle span {
       display: block;
       height: 1px;
-      background: var(--black);
-      transition: transform 0.25s, opacity 0.25s;
+      background: var(--ink);
+      transition: transform 0.3s var(--ease), opacity 0.3s var(--ease);
       transform-origin: center;
     }
     .nav-toggle.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
@@ -119,22 +145,24 @@
       position: fixed;
       top: var(--nav-h);
       left: 0; right: 0;
-      background: var(--off-white);
-      border-bottom: 1px solid var(--rule);
-      padding: 20px 24px 28px;
+      background: rgba(250,250,248,0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px 24px;
       z-index: 190;
     }
     .nav-drawer.open { display: block; }
-    .nav-drawer ul { list-style: none; display: flex; flex-direction: column; gap: 0; }
+    .nav-drawer ul { list-style: none; display: flex; flex-direction: column; }
     .nav-drawer ul a {
       display: block;
-      padding: 12px 0;
-      font-size: 19px;
+      padding: 14px 0;
+      font-size: 17px;
       font-weight: 400;
-      color: var(--black);
+      color: var(--ink);
       text-decoration: none;
-      opacity: 0.55;
-      border-bottom: 1px solid var(--rule);
+      opacity: 0.5;
+      border-bottom: 1px solid var(--border);
       transition: opacity 0.2s;
     }
     .nav-drawer ul li:last-child a { border-bottom: none; }
@@ -146,240 +174,335 @@
       min-height: 100vh;
       padding-top: var(--nav-h);
       opacity: 0;
-      transform: translateY(12px);
-      transition: opacity var(--transition-page), transform var(--transition-page);
+      transform: translateY(16px);
+      transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
     }
     .page.active { display: block; }
     .page.visible { opacity: 1; transform: translateY(0); }
 
     /* ── LAYOUT ──────────────────────────────────────── */
-    .wrap      { max-width: var(--max);      margin: 0 auto; padding: 0 48px; }
-    .wrap-wide { max-width: var(--max-wide); margin: 0 auto; padding: 0 48px; }
-
-    hr.rule { border: none; border-top: 1px solid var(--rule); margin: 80px 0; }
+    .wrap      { max-width: var(--max);      margin: 0 auto; padding: 0 clamp(24px, 4vw, 56px); }
+    .wrap-wide { max-width: var(--max-wide); margin: 0 auto; padding: 0 clamp(24px, 4vw, 56px); }
 
     .label {
-      font-size: 14px;
+      font-size: 11px;
       font-weight: 500;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--mid);
-      margin-bottom: 32px;
-      display: block;
-    }
-
-    /* ── HOME ────────────────────────────────────────── */
-    .hero { padding: 116px 0 96px; }
-
-    .hero-eyebrow {
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--mid);
+      color: var(--muted);
       margin-bottom: 36px;
       display: flex;
       align-items: center;
       gap: 12px;
     }
+    .label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 0;
+      border: none;
+    }
+
+    /* ── SCROLL REVEAL ──────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+    }
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── HOME ────────────────────────────────────────── */
+    .hero {
+      padding: clamp(80px, 12vh, 140px) 0 clamp(60px, 10vh, 120px);
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      width: 28px;
+      height: 1px;
+      background: var(--accent);
+    }
+
     .hero h1 {
       font-family: var(--serif);
-      font-size: clamp(60px, 8.75vw, 100px);
-      line-height: 1.06;
-      font-weight: 600;
-      font-optical-sizing: auto;
+      font-size: clamp(56px, 9vw, 110px);
+      line-height: 1.04;
+      font-weight: 400;
+      font-style: italic;
       letter-spacing: -0.02em;
-      color: var(--black);
-      margin-bottom: 28px;
+      color: var(--ink);
+      margin-bottom: 32px;
     }
 
     .hero-sub {
-      font-size: 21px;
-      color: var(--black);
-      max-width: 520px;
-      line-height: 1.85;
+      font-size: clamp(17px, 2vw, 20px);
+      color: var(--ink-light);
+      max-width: 480px;
+      line-height: 1.8;
+      font-weight: 300;
     }
 
     .hero-cta {
-      margin-top: 52px;
+      margin-top: 56px;
       display: flex;
-      gap: 28px;
+      gap: 32px;
       align-items: center;
     }
 
     .btn-solid {
-      display: inline-block;
-      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
       font-weight: 500;
-      letter-spacing: 0.11em;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--off-white);
-      background: var(--black);
-      padding: 13px 26px;
+      color: var(--surface);
+      background: var(--ink);
+      padding: 16px 32px;
       text-decoration: none;
-      transition: background 0.2s;
+      transition: all 0.3s var(--ease);
+      position: relative;
+      overflow: hidden;
     }
-    .btn-solid:hover { background: #555; }
+    .btn-solid::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--accent);
+      transform: translateX(-101%);
+      transition: transform 0.4s var(--ease-out);
+    }
+    .btn-solid:hover::before { transform: translateX(0); }
+    .btn-solid span { position: relative; z-index: 1; }
 
     .btn-text {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 400;
-      color: var(--mid);
+      color: var(--muted);
       text-decoration: none;
-      border-bottom: 1px solid var(--rule);
+      position: relative;
       padding-bottom: 2px;
-      transition: color 0.2s, border-color 0.2s;
+      transition: color 0.3s var(--ease);
     }
-    .btn-text:hover { color: var(--black); border-color: var(--black); }
+    .btn-text::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      transition: background 0.3s var(--ease);
+    }
+    .btn-text:hover { color: var(--ink); }
+    .btn-text:hover::after { background: var(--ink); }
 
     /* studio */
-    .studio-section { padding: 80px 0; }
-    .studio-section p {
-      font-size: 21px;
-      color: var(--black);
-      margin-bottom: 20px;
+    .studio-section { padding: clamp(60px, 8vh, 100px) 0; }
+    .studio-text {
+      display: grid;
+      gap: 20px;
     }
-    .studio-section p:last-child { margin-bottom: 0; }
-
-    /* how */
-    .how-section { padding: 80px 0; }
-    .how-intro {
-      font-family: var(--serif);
-      font-size: clamp(28px, 3.75vw, 40px);
-      line-height: 1.38;
-      font-weight: 600;
-      font-optical-sizing: auto;
-      color: var(--black);
-      margin-bottom: 24px;
-    }
-    .how-body { font-size: 21px; color: var(--black); line-height: 1.85; }
-
-    /* current */
-    .current-section { padding: 80px 0; }
-    .current-callout {
-      border-left: 2px solid var(--rule);
-      padding: 4px 0 4px 24px;
-    }
-    .current-callout p {
-      font-size: 21px;
-      color: var(--black);
+    .studio-text p {
+      font-size: 18px;
+      color: var(--ink-light);
       line-height: 1.8;
     }
-    .current-callout a {
-      color: var(--black);
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      text-decoration-color: var(--faint);
-      transition: text-decoration-color 0.2s;
+    .studio-text p:first-of-type {
+      font-size: clamp(20px, 2.5vw, 24px);
+      color: var(--ink);
+      font-weight: 400;
+      line-height: 1.65;
     }
-    .current-callout a:hover { text-decoration-color: var(--black); }
+
+    /* how */
+    .how-section { padding: clamp(60px, 8vh, 100px) 0; }
+    .how-intro {
+      font-family: var(--serif);
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.35;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--ink);
+      margin-bottom: 28px;
+    }
+    .how-body {
+      font-size: 18px;
+      color: var(--ink-light);
+      line-height: 1.85;
+      max-width: 640px;
+    }
+
+    /* current */
+    .current-section { padding: clamp(60px, 8vh, 100px) 0; }
+    .current-callout {
+      border-left: 2px solid var(--accent);
+      padding: 4px 0 4px 28px;
+    }
+    .current-callout p {
+      font-size: 18px;
+      color: var(--ink-light);
+      line-height: 1.85;
+    }
+    .current-callout a {
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 400;
+      border-bottom: 1px solid var(--accent);
+      transition: border-color 0.3s var(--ease), color 0.3s var(--ease);
+    }
+    .current-callout a:hover {
+      color: var(--accent);
+      border-color: transparent;
+    }
 
     /* ── ABOUT ───────────────────────────────────────── */
-    .page-header { padding: 116px 0 72px; }
+    .page-header { padding: clamp(80px, 12vh, 140px) 0 clamp(48px, 6vh, 80px); }
     .page-header h1 {
       font-family: var(--serif);
-      font-size: clamp(48px, 6.875vw, 80px);
-      font-weight: 600;
-      font-optical-sizing: auto;
+      font-size: clamp(48px, 7vw, 88px);
+      font-weight: 400;
+      font-style: italic;
       line-height: 1.06;
-      letter-spacing: -0.018em;
-      color: var(--black);
+      letter-spacing: -0.015em;
+      color: var(--ink);
     }
 
-    .philosophy { padding: 0 0 80px; }
+    .philosophy { padding: 0 0 clamp(60px, 8vh, 100px); }
     .big-text {
       font-family: var(--serif);
-      font-size: clamp(28px, 4vw, 45px);
+      font-size: clamp(26px, 3.5vw, 40px);
       line-height: 1.5;
       font-weight: 400;
-      font-optical-sizing: auto;
-      color: var(--faint);
+      color: var(--muted);
     }
-    .big-text strong { color: var(--black); font-weight: 600; }
+    .big-text strong {
+      color: var(--ink);
+      font-weight: 400;
+      font-style: italic;
+    }
     .body-text {
-      font-size: 21px;
-      color: var(--black);
+      font-size: 18px;
+      color: var(--ink-light);
       line-height: 1.85;
-      margin-top: 40px;
-      max-width: 728px;
+      margin-top: 44px;
+      max-width: 680px;
     }
 
     /* founders */
-    .founders { padding: 80px 0; }
+    .founders { padding: clamp(60px, 8vh, 100px) 0; }
     .founder-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1px;
-      background: var(--rule);
-      border: 1px solid var(--rule);
+      gap: 32px;
     }
     .founder-card {
-      background: var(--off-white);
-      padding: 48px 40px;
-      transition: background 0.2s;
+      background: var(--surface-warm);
+      padding: clamp(32px, 4vw, 52px);
+      transition: transform 0.4s var(--ease-out), box-shadow 0.4s var(--ease);
+      position: relative;
     }
-    .founder-card:hover { background: #f2f1ee; }
+    .founder-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.4s var(--ease);
+    }
+    .founder-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+    }
+    .founder-card:hover::before { opacity: 1; }
 
     .founder-name {
       font-family: var(--serif);
-      font-size: 28px;
-      font-weight: 600;
-      font-optical-sizing: auto;
-      color: var(--black);
-      margin-bottom: 8px;
+      font-size: clamp(24px, 3vw, 30px);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--ink);
+      margin-bottom: 10px;
     }
     .founder-role {
       display: inline-block;
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 500;
-      letter-spacing: 0.13em;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--mid);
-      border: 1px solid var(--rule);
-      padding: 3px 9px;
-      margin-bottom: 22px;
+      color: var(--accent);
+      margin-bottom: 24px;
     }
-    .founder-bio { font-size: 21px; color: var(--black); line-height: 1.82; }
+    .founder-bio {
+      font-size: 16px;
+      color: var(--ink-light);
+      line-height: 1.8;
+    }
 
     /* ── CONTACT ─────────────────────────────────────── */
     #contact .page-header p {
-      font-size: 21px;
-      color: var(--black);
+      font-size: 18px;
+      color: var(--ink-light);
       line-height: 1.75;
-      max-width: 520px;
-      margin-top: 20px;
+      max-width: 480px;
+      margin-top: 24px;
     }
-    .contact-body { padding: 0 0 120px; }
+    .contact-body { padding: 0 0 clamp(80px, 12vh, 140px); }
     .contact-email {
       font-family: var(--serif);
-      font-size: clamp(33px, 5vw, 58px);
-      font-weight: 600;
-      font-optical-sizing: auto;
-      color: var(--black);
+      font-size: clamp(30px, 5vw, 56px);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--ink);
       text-decoration: none;
       display: inline-block;
       position: relative;
-      transition: opacity 0.2s;
+      transition: color 0.3s var(--ease);
     }
     .contact-email::after {
       content: '';
       position: absolute;
-      bottom: -2px;
+      bottom: -4px;
       left: 0; right: 0;
       height: 2px;
-      background: var(--black);
+      background: var(--accent);
       transform-origin: left;
-      transition: transform 0.25s ease;
+      transition: transform 0.4s var(--ease-out);
     }
-    .contact-email:hover { opacity: 0.5; }
-    .contact-email:hover::after { transform: scaleX(0.6); }
+    .contact-email:hover { color: var(--accent); }
+    .contact-email:hover::after { transform: scaleX(0.5); }
 
     .contact-note {
       margin-top: 56px;
-      font-size: 21px;
-      color: var(--black);
+      font-size: 18px;
+      color: var(--ink-light);
       line-height: 1.85;
-      max-width: 494px;
+      max-width: 480px;
     }
 
     /* ── CONTACT STICKY FOOTER ──────────────────────── */
@@ -391,25 +514,26 @@
 
     /* ── FOOTER ──────────────────────────────────────── */
     footer {
-      border-top: 1px solid var(--rule);
-      padding: 28px 48px;
+      border-top: 1px solid var(--border);
+      padding: 28px clamp(24px, 4vw, 56px);
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    footer p { font-size: 15px; color: var(--mid); letter-spacing: 0.03em; }
+    footer p {
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
 
     /* ── RESPONSIVE ──────────────────────────────────── */
-    @media (max-width: 640px) {
-      nav { padding: 0 24px; }
+    @media (max-width: 768px) {
       .nav-links { display: none; }
       .nav-toggle { display: flex; }
-      .wrap, .wrap-wide { padding: 0 24px; }
-      footer { padding: 24px; flex-direction: column; gap: 8px; text-align: center; }
-      .hero { padding: 88px 0 68px; }
       .founder-grid { grid-template-columns: 1fr; }
       .founder-card { padding: 32px 24px; }
-      .current-callout { padding-left: 18px; }
+      .current-callout { padding-left: 20px; }
+      footer { flex-direction: column; gap: 6px; text-align: center; }
     }
   </style>
 </head>
@@ -446,22 +570,28 @@
       <h1>Unravel<br>complexity.</h1>
       <p class="hero-sub">Design, experience, and intelligence at the edges. A creative studio for the curious.</p>
       <div class="hero-cta">
-        <a class="btn-solid" href="#" onclick="show('about'); return false;">The Studio</a>
+        <a class="btn-solid" href="#" onclick="show('about'); return false;"><span>The Studio</span></a>
         <a class="btn-text"  href="#" onclick="show('contact'); return false;">Get in touch</a>
       </div>
     </div>
   </section>
 
-  <section class="studio-section">
+  <hr class="divider">
+
+  <section class="studio-section reveal">
     <div class="wrap">
       <span class="label">The Studio</span>
-      <p>Wemaiq is a boutique creative studio based in Canada.</p>
-      <p>Founded by Brigitte K and Alex M, the studio brings together decades of experience across user experience, product design, and service design. Together they have led organizations, shaped product strategy, and built digital systems used by millions of people.</p>
-      <p>Today their work focuses on designing and building thoughtful software — tools grounded in human needs, clear thinking, and careful craft.</p>
+      <div class="studio-text">
+        <p>Wemaiq is a boutique creative studio based in Canada.</p>
+        <p>Founded by Brigitte K and Alex M, the studio brings together decades of experience across user experience, product design, and service design. Together they have led organizations, shaped product strategy, and built digital systems used by millions of people.</p>
+        <p>Today their work focuses on designing and building thoughtful software — tools grounded in human needs, clear thinking, and careful craft.</p>
+      </div>
     </div>
   </section>
 
-  <section class="how-section">
+  <hr class="divider">
+
+  <section class="how-section reveal">
     <div class="wrap">
       <span class="label">How We Work</span>
       <p class="how-intro">We believe the best tools emerge from a deep understanding of people.</p>
@@ -469,7 +599,9 @@
     </div>
   </section>
 
-  <section class="current-section">
+  <hr class="divider">
+
+  <section class="current-section reveal">
     <div class="wrap">
       <span class="label">Current Work</span>
       <div class="current-callout">
@@ -490,18 +622,20 @@
   <section class="page-header">
     <div class="wrap">
       <span class="label">About</span>
-      <h1>Function<br>+ <em>Feeling</em>.</h1>
+      <h1>Function<br>+ Feeling.</h1>
     </div>
   </section>
 
-  <section class="philosophy">
-    <div class="wrap">
+  <hr class="divider">
+
+  <section class="philosophy reveal">
+    <div class="wrap" style="padding-top: clamp(48px, 6vh, 80px);">
       <p class="big-text">We believe things should <strong>work.</strong> That the care put into making something is felt by the people who use it — <strong>a connection</strong> from creator to creation.</p>
       <p class="body-text">So on every project we start with two questions: what does it do, and how does using it make people feel? Our approach combines product thinking, design craft, and systems thinking to create software that is simple, durable, and genuinely useful. We focus on clarity, usability, and long-term product thinking rather than trends.</p>
     </div>
   </section>
 
-  <section class="founders">
+  <section class="founders reveal">
     <div class="wrap-wide">
       <span class="label">Founders</span>
       <div class="founder-grid">
@@ -519,7 +653,7 @@
     </div>
   </section>
 
-  <section class="current-section" style="padding: 0 0 80px;">
+  <section class="current-section reveal" style="padding-bottom: clamp(60px, 8vh, 100px);">
     <div class="wrap">
       <span class="label">Current Work</span>
       <div class="current-callout">
@@ -545,8 +679,10 @@
     </div>
   </section>
 
-  <section class="contact-body">
-    <div class="wrap">
+  <hr class="divider">
+
+  <section class="contact-body reveal">
+    <div class="wrap" style="padding-top: clamp(48px, 6vh, 80px);">
       <a class="contact-email" href="mailto:hello@wemaiq.com">hello@wemaiq.com</a>
       <p class="contact-note">We're a small studio, so we take on select projects where we can do our best work. If what you're building sounds interesting, reach out — we'll get back to you promptly.</p>
     </div>
@@ -566,11 +702,10 @@
     var prev = document.getElementById(currentPage);
     var next = document.getElementById(id);
 
-    // Only fade out if navigating to a different page
     if (prev && prev !== next) {
       prev.classList.remove('visible');
       var prevRef = prev;
-      setTimeout(function() { prevRef.classList.remove('active'); }, 420);
+      setTimeout(function() { prevRef.classList.remove('active'); }, 500);
     }
 
     currentPage = id;
@@ -588,12 +723,38 @@
     next.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'instant' });
 
-    // Trigger fade-in + slide-up on next frame
+    // Reset reveal animations for the new page
+    next.querySelectorAll('.reveal').forEach(function(el) {
+      el.classList.remove('in-view');
+    });
+
     requestAnimationFrame(function() {
       requestAnimationFrame(function() {
         next.classList.add('visible');
+        observeReveals();
       });
     });
+  }
+
+  // Scroll reveal with IntersectionObserver
+  var observer;
+  function observeReveals() {
+    if (observer) observer.disconnect();
+    observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    var active = document.querySelector('.page.active');
+    if (active) {
+      active.querySelectorAll('.reveal').forEach(function(el) {
+        observer.observe(el);
+      });
+    }
   }
 
   // mobile drawer
@@ -612,7 +773,6 @@
     toggle.setAttribute('aria-expanded', String(isOpen));
   });
 
-  // close drawer on outside click
   document.addEventListener('click', function(e) {
     if (!toggle.contains(e.target) && !drawer.contains(e.target)) {
       closeDrawer();
